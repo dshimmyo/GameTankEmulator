@@ -1134,6 +1134,10 @@ extern "C" {
 				}
 			}
 		}
+		void SetJoystickPaddleMode(bool enabled) {
+			paddleDetected = enabled;//allows ROM to adjust
+			
+		}
 		void SetPaddleTouchMode(bool enabled) {
 			paddle_touch_mode = enabled;
 			// If we switch to touch, we must ensure relative mode is off
@@ -2274,20 +2278,23 @@ if (romRequestedPaddle){ //master switch for paddle behavior
 						}
 					}
 				}
-            } else if (e.type == SDL_JOYAXISMOTION) {
-				#ifdef WASM_BUILD
-				if (e.jaxis.axis == paddle_axis_index) {
-					if (use_any_joystick_as_paddle || e.jaxis.which == dksPaddle_instanceID) {
-						currentPaddleRawValue = e.jaxis.value; 
-					}
-				}
-				#else
+            } 
+	#ifndef WASM_BUILD
+
+			else if (e.type == SDL_JOYAXISMOTION) {
+				// #ifdef WASM_BUILD
+				// if (e.jaxis.axis == paddle_axis_index) {
+				// 	if (use_any_joystick_as_paddle || e.jaxis.which == dksPaddle_instanceID) {
+				// 		currentPaddleRawValue = e.jaxis.value; 
+				// 	}
+				// }
+				// #else
 				if (paddleDetected && e.jaxis.axis == paddle_axis_index && !paddle_emulation_enabled) {
 					if (/*use_any_joystick_as_paddle || */ e.jaxis.which == dksPaddle_instanceID) {
 						currentPaddleRawValue = e.jaxis.value;
 					}               
 				}
-				#endif
+				// #endif
             } else if (e.type == SDL_JOYBUTTONDOWN || e.type == SDL_JOYBUTTONUP) {
 				//printf("Button Press: %d\n", e.jbutton.button);
 
@@ -2319,6 +2326,8 @@ if (romRequestedPaddle){ //master switch for paddle behavior
 			else {
 				joysticks->update(&e, showMenu || resetQueued);
 			}
+#endif
+
         }
 
 		if(joysticks->CheckSystemButtonPressed()) {
