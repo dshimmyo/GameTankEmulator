@@ -58,10 +58,3 @@ void PaddleInit(void) {
         }
     }
 }
-
-void PaddleCleanup(void) {
-    if (active_paddle_handle != NULL) {
-        SDL_JoystickClose(active_paddle_handle);
-        active_paddle_handle = NULL;
-    }
-}

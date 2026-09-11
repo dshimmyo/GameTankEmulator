@@ -1226,10 +1226,8 @@ else if (joystick_paddle_enabled) {
 		// We treat the full joystick range as our "Window Width"
 		// Logical range of SDL Axis is 65535 units wide
 		const int virtualWidth = 65535;
-		
 		// Offset the raw value (-32768 to 32767) to be 0 to 65535
 		int normalizedX = currentPaddleRawValue + 32768;
-
 		joysticks->UpdatePaddleFromCursorPos(0, normalizedX, virtualWidth);
 } 
 else {
@@ -1473,11 +1471,8 @@ else {
 				}
             } else if (e.type == SDL_JOYBUTTONDOWN || e.type == SDL_JOYBUTTONUP) {
                 if (paddleDetected && e.jbutton.button == 0) {
-
 					bool isDown = (e.type == SDL_JOYBUTTONDOWN);
-					
 					joysticks->SetPaddleAButtonDirect(isDown);
-
                 }
 			 } else if (e.type == SDL_JOYDEVICEREMOVED) {
 				if (paddleDetected && e.jdevice.which == paddle_instanceID) {
